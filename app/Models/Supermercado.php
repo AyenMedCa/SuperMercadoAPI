@@ -9,7 +9,6 @@ use mysql_xdevapi\Table;
 class Supermercado extends Model
 {
     use HasFactory;
-
     protected $table = 'Supermercado';
 
     protected $fillable = [
@@ -24,6 +23,6 @@ class Supermercado extends Model
 
     public function ciudad()
     {
-        return $this->belongsTo(Cuidad::class, 'ciudad_id');
+        return $this->belongsTo(Ciudad::class, 'ciudad_id');
     }
 }
