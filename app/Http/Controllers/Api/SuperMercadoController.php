@@ -6,20 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Supermercado;
 use http\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class SuperMercadoController extends Controller
 {
     public function index()
     {
-        $supermercado = Supermercado::all();
-        if ($supermercado->isEmpty()){
+        $supermercados = Supermercado::all();
+        if ($supermercados->isEmpty()){
             $data = Response()->json(
                 ['message' => 'No hay supermercados en la base de datos', 'status' => 200]
             );
             return Response()->json($data, 400);
         }
-        return Response()->json($supermercado, 200);
+        foreach ($supermercados as $supermercado) {
+            $supermercado->logo_url = asset('storage/public/images/' . $supermercado->logo);
+        }
+        return Response()->json($supermercados, 200);
     }
 
     public function store(Request $request)
@@ -28,7 +32,7 @@ class SuperMercadoController extends Controller
             'nombre' => 'required',
             'NIT' => 'required|unique:supermercado,NIT',
             'direccion' => 'required',
-            'logo' => 'required',
+            'logo' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'latitud' => 'required',
             'longitud' => 'required',
             'ciudad_id' => 'required'
@@ -42,14 +46,19 @@ class SuperMercadoController extends Controller
             ];
             return Response()->json($data, 400);
         }
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('public/images');
+        }
+
         $supermercado = Supermercado::create([
-           'nombre' => $request->nombre,
-           'NIT' => $request->NIT,
-           'direccion' => $request->direccion,
-           'logo' => $request->logo,
-           'latitud' => $request->latitud,
-           'longitud' => $request->longitud,
-           'ciudad_id' => $request->ciudad_id
+            'nombre' => $request->nombre,
+            'NIT' => $request->NIT,
+            'direccion' => $request->direccion,
+            'latitud' => $request->latitud,
+            'longitud' => $request->longitud,
+            'ciudad_id' => $request->ciudad_id,
+            'logo' => $logoPath ? Storage::url($logoPath) : null,
         ]);
 
         if (!$supermercado){
@@ -77,11 +86,7 @@ class SuperMercadoController extends Controller
             ];
             return response()->json($data, 404);
         }
-        $data = [
-            'supermercado' => $supermercado,
-            'status' => 200
-        ];
-        return response()->json($data, 200);
+        return response()->json($supermercado, 200);
     }
 
     public function destroy($id)

@@ -15,6 +15,12 @@ class Ciudad extends Model
         'nombre'
     ];
 
+    // Aquí puedes ocultar los campos timestamps
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
     public function superMercados()
     {
         return $this->hasMany(Supermercado::class, 'ciudad_id');

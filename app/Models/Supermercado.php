@@ -21,6 +21,12 @@ class Supermercado extends Model
         'ciudad_id'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+
     public function ciudad()
     {
         return $this->belongsTo(Ciudad::class, 'ciudad_id');

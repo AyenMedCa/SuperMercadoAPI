@@ -17,7 +17,8 @@ Route::group(['middleware' => 'api'], function() {
 # Rutas de la ciudad con middleware 'api'
 Route::group(['middleware' => 'api'], function() {
     Route::post('/ciudad', [CiudadController::class, 'store']);
-    Route::get('/ciudades', [CiudadController::class, 'index']);
+    Route::get('/ciudad/all', [CiudadController::class, 'index']);
+    Route::get('/ciudad/{id}', [CiudadController::class, 'show']);
 });
 
 # Rutas para el auth

@@ -49,4 +49,19 @@ class CiudadController extends Controller
         return Response()->json($ciudades, 200);
     }
 
+    public function show($id)
+    {
+        $ciudad = Ciudad::find($id);
+
+        if (!$ciudad){
+            $data = [
+                'message' => 'ciudad no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
+
+        return response()->json($ciudad, 200);
+    }
+
 }
