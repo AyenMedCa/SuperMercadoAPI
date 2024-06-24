@@ -135,6 +135,7 @@ class SuperMercadoController extends Controller
 
         if ($validator->fails()){
             $data = [
+                'datos' => $request,
                 'message' => 'Error en la validacion de los datos',
                 'errors' => $validator->errors(),
                 'status' => 400

@@ -5,8 +5,8 @@ use App\Http\Controllers\Api\SuperMercadoController;
 use App\Http\Controllers\Api\CiudadController;
 use App\Http\Controllers\auth\AuthController;
 
-# Rutas del supermercado con middleware 'api'
-Route::group(['middleware' => 'api'], function() {
+# Rutas del supermercado con middleware 'auth:api'
+Route::group(['middleware' => 'auth:api'], function() {
     Route::get('/supermercado/all', [SuperMercadoController::class, 'index']);
     Route::post('/supermercado', [SuperMercadoController::class, 'store']);
     Route::get('/supermercado/{id}', [SuperMercadoController::class, 'show']);
@@ -14,8 +14,8 @@ Route::group(['middleware' => 'api'], function() {
     Route::put('/supermercado/{id}', [SuperMercadoController::class, 'update']);
 });
 
-# Rutas de la ciudad con middleware 'api'
-Route::group(['middleware' => 'api'], function() {
+# Rutas de la ciudad con middleware 'auth:api'
+Route::group(['middleware' => 'auth:api'], function() {
     Route::post('/ciudad', [CiudadController::class, 'store']);
     Route::get('/ciudad/all', [CiudadController::class, 'index']);
     Route::get('/ciudad/{id}', [CiudadController::class, 'show']);
